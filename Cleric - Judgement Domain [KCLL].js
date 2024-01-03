@@ -48,7 +48,7 @@ AddSubClass("cleric", "judgement domain", {
 			source : ["KCLL", 98],
 			minlevel : 1,
 			description : desc([
-				"When I deal damage to a creature with a cleric spell, I can apply additional damage to a creature equal to your Wisdom modifier damage if that target has dealt damage to another creature since the end of your last turn."
+				"When I deal damage to a creature with a cleric spell, I can apply additional damage to a creature equal to my Wisdom modifier if that target has dealt damage to another creature since the end of my last turn."
 			]),
 			usages : "Wisdom modifier per",
 			usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
@@ -59,10 +59,7 @@ AddSubClass("cleric", "judgement domain", {
 			source : ["KCLL", 98],
 			minlevel : 2,
 			description : desc([
-			"As an action, I crush a target within 60 ft. under the weight of their sins.",
-			"On a failed WIS saving throw, the target is knocked prone and their movement speed is dropped to 0 for 1 min.",
-			"The creature can repeat their saving throw at the end of each of their turns. They make this save disadvantage if they have dealt damage since the start of their turn.",
-			"I can apply the bonus damage of Sacred Judgement when dealing damage with a Cleric spell to a creature you have Invoked Judgement on regardless if they have damaged another creature.",
+			"As an action, I crush a target within 60 ft. under the weight of their sins. On a failed WIS saving throw, the target is knocked prone and their movement speed is dropped to 0 for 1 min. The creature can repeat their saving throw at the end of each of their turns. They make this save disadvantage if they have dealt damage since the start of their turn. I can apply the bonus damage of Sacred Judgement when dealing damage with a Cleric spell to a creature I have Invoked Judgement on regardless if they have damaged another creature.",
 			"This persists for 1 minute regardless of their save."
 			]),
 			action : ["action", ""]
@@ -72,7 +69,7 @@ AddSubClass("cleric", "judgement domain", {
 			source : ["KCLL", 98],
 			minlevel : 6,
 			description : desc([
-				"When an allied creature within 60 feet of you is reduced to zero hit points or takes damage from another creature while under the effect of a sanctuary spell you cast, you can cast hellish rebuke against the attacker them without expending a spell slot."
+				"When an allied creature within 60 feet of me is reduced to zero hit points or takes damage from another creature while under the effect of a sanctuary spell you cast, I can cast hellish rebuke against the attacker them without expending a spell slot."
 			]),
 			usages : "Wisdom modifier per",
 			usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
