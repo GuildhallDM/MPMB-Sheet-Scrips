@@ -7,90 +7,103 @@
 */
 
 /*	-INFORMATION-
-	Subject:	Subclass
-	Effect:		This script adds a subclass for the Cleric, called "Judgement"
-				This is taken from Kibbles Tasty's Compendium of Legends and Legacies (https://www.kickstarter.com/projects/kibblestasty/kibbles-compendium-of-legends-and-legacies)
-				This subclass is made by Kibbles Tasty
+	Subject:	Race
+	Effect:		This script adds the player race "Warped"
+				This is taken from the Kibbles' Compendium of Craft and Creation (https://www.kickstarter.com/projects/kibblestasty/kibbles-compendium-of-craft-and-creation)
 	Code by:	Guildhall_DM
-	Date:		01-03-24
+	Date:		01/03/2024
 */
 
-var iFileName = "Cleric - Judgement Domain.js";
+var iFileName = "Race - Warped [KCCC].js";
 RequiredSheetVersion(13);
 
-SourceList["KCLL"] = {
-	name : "Cleric - Judgement Domain",
-	abbreviation : "KCLL",
+SourceList["KCCC"] = {
+	name : "Kibbles' Compendium of Craft and Creation",
+	abbreviation : "KCCC",
 	group : "Third Party",
-	url : "https://www.kickstarter.com/projects/kibblestasty/kibbles-compendium-of-legends-and-legacies",
-	date : "10-03-23"
+	url : "https://www.kickstarter.com/projects/kibblestasty/kibbles-compendium-of-craft-and-creation",
+	date : "09/20/2022"
 };
 
-AddSubClass("cleric", "judgement domain", {
-	regExpSearch : /^(?=.*(cleric|priest|clergy|acolyte))(?=.*judgement).*$/i,
-	subname : "Judgement Domain",
-	source : ["KCLL", 97],
-	spellcastingExtra : ["sanctuary", "hellish rebuke", "detect thoughts", "zone of truth", "counterspell", "fear", "banishment", "locate creatue", "dispel good and evil", "geas"],
+RaceList["warped"] = {
+	regExpSearch : /warped/i,
+	name : "Warped",
+	source : [["KCLL", 123]],
+	plural : "Warped",
+	size : [3, 4],
+	speed : { walk : { spd : 30, enc : 20 } },
+	languageProfs : ["Deep Speech", 1],
+	age : " ages at the same rate as origin race.",
+	height : " height is determined by origin race",
+	weight : " weight is determined by origin race",
+	scores : [0, 0, 1, 2, 0, 0],
+	trait : [
+		"Warped (+2 Intelligence, +1 Constitution)",
+		"\u2022 Warped Origin: Select an existing race option. You gain the creature type, size, and languages of that race.",
+		"\u2022 Inured of Madness: I have resistance to psychic damage and I automatically pass any saves against madness.",
+		"\u2022 Inner voice: I can add 1d6 to an ability check I make an amount of times equal to my proficiency bonus.",
+		"\u2022 Warped Gift: My condition grants me one special trait. See the Notes page for my 'Gifts'."].join(typePF ? "\n" : " "),
+	dmgres : ["Psychic"],
+	savetxt : {
+		text : ["I automatically pass any saves against madness"]
+	},
 	features : {
-		"subclassfeature1" : {
-			name : "Bonus Cantrip",
-			source : ["KCLL", 98],
-			minlevel : 1,
-			description : "\n   " + "I learn the Sacred Flame cantrip if I don't already know it",
-			spellcastingBonus : {
-				name : "Bonus Cantrip",
-				spells : ["sacred flame"],
-				selection : ["sacred flame"],
-			}, 
-		},
-		"subclassfeature1.1" : {
-			name : "Sacred Judgement",
-			source : ["KCLL", 98],
-			minlevel : 1,
-			description : desc([
-				"When I deal damage to a creature with a cleric spell, I can apply additional damage to a creature equal to my Wisdom modifier if that target has dealt damage to another creature since the end of my last turn."
-			]),
-			usages : "Wisdom modifier per",
-			usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
-			recovery : "long rest"
-		},
-		"subclassfeature2" : {
-			name : "Channel Divinity: Invoke Judgement",
-			source : ["KCLL", 98],
-			minlevel : 2,
-			description : desc([
-			"As an action, I crush a target within 60 ft. under the weight of their sins. On a failed WIS saving throw, the target is knocked prone and their movement speed is dropped to 0 for 1 min. The creature can repeat their saving throw at the end of each of their turns. They make this save disadvantage if they have dealt damage since the start of their turn. I can apply the bonus damage of Sacred Judgement when dealing damage with a Cleric spell to a creature I have Invoked Judgement on regardless if they have damaged another creature.",
-			"This persists for 1 minute regardless of their save."
-			]),
-			action : ["action", ""]
-		},
-		"subclassfeature6" : {
-			name : "Rebuke",
-			source : ["KCLL", 98],
-			minlevel : 6,
-			description : desc([
-				"When an allied creature within 60 feet of me is reduced to zero hit points or takes damage from another creature while under the effect of a sanctuary spell you cast, I can cast hellish rebuke against the attacker them without expending a spell slot."
-			]),
-			usages : "Wisdom modifier per",
-			usagescalc : "event.value = Math.max(1, What('Wis Mod'));",
-			recovery : "long rest"
-		},
-		"subclassfeature8" : {
-			name : "Potent Cantrips",
-			source : ["KCLL", 98],
-			minlevel : 8,
-			description : "\n   " + "I add my Wisdom modifier to the damage I deal with my cleric cantrips",
-			calcChanges : {
-				atkCalc : ["if (classes.known.cleric && classes.known.cleric.level > 7 && thisWeapon[4].indexOf('cleric') !== -1 && thisWeapon[3] && SpellsList[thisWeapon[3]].level === 0) { output.extraDmg += What('Wis Mod'); }; ", "My cleric cantrips get my Wisdom modifier added to their damage."]
+			"inner voice" : {
+				name : "Inner Voice",
+				usages : "Proficiency bonus per",
+				usagescalc : "event.value = How('Proficiency Bonus');",
+				recovery : "long rest"
 			}
-		},
-		"subclassfeature17" : {
-			name : "Eternal Judgement",
-			source : ["KCLL", 98],
-			minlevel : 17,
-			description : desc([
-			"My Sacred Judgement can be used an unlimited number of times."
-			]),
-		},
-	}
+	},
+	toNotesPage : [{
+		name : "Warped Gifts",
+		source : [["KCCC", 123]],
+		note : [
+			"My condition grants me one special trait. Some may view it as a curse or burden, but I have adapted to using it to my advantage. Select one of the following options from the list below:",
+			"\u2022 Warped Eyes: I have advantage on Wisdom (Perception) checks against living creatures, and disadvantage on Wisdom (Perception) checks against non-living things.",
+			"\u2022 Warped Limb: One of my limbs is abnormally long ang flexible. Any weapon I wield in that hand gains the reach property.",
+			"\u2022 Warped Mind: I am immune to magic that allows other creatures to read my thoughts, determine whether I am lying, know my alignment, or know my creature type. Creatures can telepathically communicate with me only if I allow it.",
+			"\u2022 Warped Skin: My skin is a rough mottled hide. I have resistance to acid damage.",
+			"\u2022 Warped Form: You can move through spaces for a smaller creatures without squeezing and when you aren’t wearing armor, your AC is 12 + your Constitution modifier. You can use your natural armor to determine your AC if the armor you wear would leave you with a lower AC. A shield’s benefits apply as normal while you use your natural armor."
+		]
+	}]
+};
+
+AddRacialVariant("warped", "warped eyes gift", {
+	regExpSearch : /^(?=.*warped)(?=.*eyes).*$/i,
+	source : [["KCLL", 123]],
+	trait : RaceList.warped.trait.replace("warped eyes"),
+	vision : [["Adv. on Perception against living creatures, and disadv. on Perception against non-living things.", 0]]
+});
+AddRacialVariant("warped", "warped limb gift", {
+	regExpSearch : /^(?=.*warped)(?=.*limb).*$/i,
+	source : [["KCLL", 123]],
+	trait : RaceList.warped.trait.replace("warped limb"),
+});
+AddRacialVariant("warped", "warped mind gift", {
+	regExpSearch : /^(?=.*warped)(?=.*mind).*$/i,
+	source : [["KCLL", 123]],
+	trait : RaceList.warped.trait.replace("warped mind"),
+	savetxt : {
+		text : ["I automatically pass any saves against madness and I am immune to magic that allows other creatures to read my thoughts. Telepathy doesn't work unless I allow it."]
+	},
+});
+AddRacialVariant("warped", "warped skin gift", {
+	regExpSearch : /^(?=.*warped)(?=.*skin).*$/i,
+	source : [["KCLL", 123]],
+	trait : RaceList.warped.trait.replace("warped skin"),
+	dmgres : ["acid", "psychic"]
+});
+AddRacialVariant("warped", "warped form gift", {
+	regExpSearch : /^(?=.*warped)(?=.*form).*$/i,
+	source : [["KCLL", 123]],
+	trait : RaceList.warped.trait.replace("warped form"),
+	armorOptions : [{
+        regExpSearch : /^(?=.*warped)(?=.*form).*$/i,
+        name : "Warped Form (Con)",
+        source : ["KCCC", 123],
+        ac : "12+Con",
+        affectsWildShape : true
+    }],
+    armorAdd : "Warped Form (Con)"
 });
